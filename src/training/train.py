@@ -2,10 +2,14 @@
 
 import os
 import sys
+import yaml
 import argparse
+import torch
+import torch.nn as nn
 from pathlib import Path
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
+from torch.utils.data import DataLoader
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
 
@@ -13,12 +17,10 @@ from torch.utils.data import DataLoader
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-from src.models.yolo_model import create_yolov8n_model
-# Loss import removed - using working_loss directly
 from src.data.dataset import FloorplanDataset
-from src.training.lightning_module import create_lightning_module
+from src.training.lightning_module import YOLOv8nLightningModule
 from src.utils.logger import get_logger
-from src.utils.config import config_manager
+from src.utils.config import ConfigManager
 
 logger = get_logger(__name__)
 
@@ -51,6 +53,9 @@ def collate_fn(batch):
 def setup_training_environment():
     logger.info("Setting up training environment...")
     
+    # Create config manager
+    config_manager = ConfigManager()
+
     # Validate configuration
     if not config_manager.validate_config():
         logger.error("Configuration validation failed")
@@ -244,7 +249,7 @@ def main(config_path: str = 'configs/config.yaml', resume_path: str = None,
         train_loader, val_loader = create_data_loaders(config)
         
         # Create Lightning module
-        lightning_module = create_lightning_module(
+        lightning_module = YOLOv8nLightningModule(
             num_classes=config['model']['num_classes'],
             input_size=config['model']['input_size'],
             learning_rate=config['training']['learning_rate']

@@ -1,16 +1,19 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from typing import Dict, Any, Optional
+import numpy as np
+from typing import Dict, Any, List, Tuple
+import logging
 
 from ..models.yolo_model import YOLOv8n
 from ..models.working_loss import WorkingYOLOLoss
 from ..utils.logger import get_logger
-from ..utils.config import config_manager
+from ..utils.config import ConfigManager
 
 logger = get_logger(__name__)
 
