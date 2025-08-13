@@ -1,3 +1,8 @@
+"""
+Floorplan Dataset Implementation
+
+Simple dataset class for floorplan images with YOLO format labels.
+"""
 
 import os
 import random
@@ -7,11 +12,15 @@ import torch
 from torch.utils.data import Dataset
 from pathlib import Path
 from typing import List, Tuple
+
 from ..utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-class FloorplanDataset(Dataset):    
+
+class FloorplanDataset(Dataset):
+    """Simple dataset class for floorplan object detection."""
+    
     def __init__(self, data_dir: str, img_size: int = 640, subset_ratio: float = 1.0,
                  augment: bool = True, is_training: bool = True, data_proportion: float = 1.0):
         self.data_dir = Path(data_dir)
@@ -142,12 +151,14 @@ class FloorplanDataset(Dataset):
         return img_tensor, label_tensor
     
     def _load_image(self, img_path: str) -> np.ndarray:
+        """Load image from file with better PNG handling."""
         try:
+            # Use PIL for better PNG handling (fixes iCCP warnings)
             from PIL import Image
             import warnings
             
-            # # Suppress iCCP warnings
-            # warnings.filterwarnings("ignore", category=UserWarning, module="PIL")
+            # Suppress iCCP warnings
+            warnings.filterwarnings("ignore", category=UserWarning, module="PIL")
             
             # Load with PIL first
             pil_img = Image.open(img_path).convert('RGB')
@@ -167,6 +178,7 @@ class FloorplanDataset(Dataset):
             return np.zeros((self.img_size, self.img_size, 3), dtype=np.uint8)
     
     def _load_labels(self, label_path: str) -> List[List[float]]:
+        """Load YOLO format labels."""
         try:
             labels = []
             with open(label_path, 'r') as f:
@@ -182,6 +194,7 @@ class FloorplanDataset(Dataset):
             return []
     
     def _apply_augmentations(self, img: np.ndarray, labels: List[List[float]]) -> Tuple[np.ndarray, List[List[float]]]:
+        """Apply simple augmentations."""
         if not self.augment or not labels:
             return img, labels
         
@@ -194,6 +207,7 @@ class FloorplanDataset(Dataset):
         return img, labels
     
     def _resize_image_and_labels(self, img: np.ndarray, labels: List[List[float]]) -> Tuple[np.ndarray, List[List[float]]]:
+        """Resize image and adjust labels."""
         h, w = img.shape[:2]
         
         # Resize image
@@ -231,6 +245,7 @@ class FloorplanDataset(Dataset):
 
 def create_floorplan_dataset(data_dir: str, img_size: int = 640, subset_ratio: float = 1.0,
                            augment: bool = True, is_training: bool = True) -> FloorplanDataset:
+    """Factory function to create floorplan dataset."""
     return FloorplanDataset(
         data_dir=data_dir,
         img_size=img_size,
