@@ -91,7 +91,7 @@ This means:
 ### 3. Organize Dataset
 ```bash
 # Automatically split into train/val/test
-python split_dataset.py
+python src/data/split_dataset.py
 ```
 
 **What this script does:**
@@ -327,7 +327,7 @@ cp configs/config_template.yaml configs/config.yaml
 
 # If split_dataset.py fails
 ls data/images/ data/labels/  # Check files exist
-python split_dataset.py --help  # Check script options
+python src/data/split_dataset.py --help  # Check script options
 ```
 
 ### Memory Issues
