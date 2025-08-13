@@ -1,0 +1,29 @@
+# Core Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+pytorch-lightning>=2.0.0
+
+# Computer Vision and Image Processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+albumentations>=1.4.0
+
+# Data Processing and Numerical Computing
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Visualization and Plotting
+matplotlib>=3.7.0
+tensorboard>=2.0.0
+
+# Configuration and Utilities
+PyYAML>=6.0
+tqdm>=4.65.0
+
+# Model Export and Inference
+onnx>=1.14.0
+onnxruntime>=1.15.0
+
+# Additional Dependencies
+pathlib2>=2.3.7; python_version < "3.4"
+typing-extensions>=4.0.0; python_version < "3.8"
