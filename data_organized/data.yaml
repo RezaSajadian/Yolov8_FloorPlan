@@ -1,0 +1,9 @@
+names:
+- room
+- window
+- door
+nc: 3
+path: data_organized
+test: test/images
+train: train/images
+val: val/images

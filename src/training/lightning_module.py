@@ -151,7 +151,7 @@ class YOLOv8nLightningModule(pl.LightningModule):
             'optimizer': optimizer,
             'lr_scheduler': {
                 'scheduler': scheduler,
-                'monitor': 'val_loss',
+                'monitor': 'val/total_loss',
                 'frequency': 1
             }
         }
@@ -162,8 +162,8 @@ class YOLOv8nLightningModule(pl.LightningModule):
         # Model checkpointing
         checkpoint_callback = ModelCheckpoint(
             dirpath='checkpoints',
-            filename='yolov8n-{epoch:02d}-{val_loss:.4f}',
-            monitor='val_loss',
+            filename='yolov8n-{epoch:02d}-{val_total_loss:.4f}',
+            monitor='val/total_loss',
             mode='min',
             save_top_k=3,
             save_last=True
@@ -172,7 +172,7 @@ class YOLOv8nLightningModule(pl.LightningModule):
         
         # Early stopping
         early_stop_callback = EarlyStopping(
-            monitor='val_loss',
+            monitor='val/total_loss',
             patience=10,
             mode='min',
             min_delta=0.001

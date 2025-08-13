@@ -1,138 +1,105 @@
-# YOLOv8n Floorplan Detection Configuration Template
-# Copy this file to config.yaml and update the paths for your dataset
-
-# Model Configuration
-model:
-  name: "yolov8n"
-  input_size: 640
-  num_classes: 3  # rooms, windows, doors
-  depth_multiplier: 0.33
-  width_multiplier: 0.25
-  num_scales: 3
-  confidence_threshold: 0.25
-  nms_threshold: 0.45
-
-# Data Configuration
 data:
-  # DATASET PATHS - UPDATE THESE FOR YOUR SYSTEM
-  train_path: "data_organized/train"  # Path to training data
-  val_path: "data_organized/val"      # Path to validation data
-  test_path: "data_organized/test"    # Path to test data
-  
-  # Data splitting proportions
-  train_split: 0.70
-  val_split: 0.10
-  test_split: 0.20
-  
-  # Data proportions for training/validation
-  train_data_proportion: 1.0
-  val_data_proportion: 1.0
-  test_data_proportion: 1.0
-  
-  fast_inference_subset: 0.02
-  split_strategy: "random"
-  
-  # Data augmentation
   augmentations:
+    cutmix: 0.1
+    degrees: 0.0
+    fliplr: 0.5
+    flipud: 0.0
     hsv_h: 0.015
     hsv_s: 0.7
     hsv_v: 0.4
-    degrees: 0.0
-    translate: 0.15
+    mixup: 0.1
+    mosaic: 1.0
+    perspective: 0.0
+    random_erasing: 0.1
     scale: 0.6
     shear: 0.0
-    perspective: 0.0
-    flipud: 0.0
-    fliplr: 0.5
-    mosaic: 1.0
-    mixup: 0.1
-    cutmix: 0.1
-    random_erasing: 0.1
-
-# Training Configuration
-training:
-  batch_size: 32
-  num_epochs: 50
-  learning_rate: 0.0003
-  weight_decay: 0.0003
-  lr_scheduler: "cosine"
-  warmup_epochs: 8
-  warmup_start_lr: 0.0001
-  warmup_method: "linear"
-  lr_decay_factor: 0.1
-  
-  loss_weights:
-    bbox: 0.1
-    obj: 0.7
-    cls: 0.6
-  
-  patience: 8
-  min_delta: 0.005
-  label_smoothing: 0.1
-  focal_loss_alpha: 0.25
-  focal_loss_gamma: 2.0
-  mixup: 0.1
-  cutmix: 0.1
-  dropout: 0.1
-
-# Hardware Configuration
-hardware:
-  device: "auto"
-  mixed_precision: true
-  gradient_accumulation_steps: 1
-  num_gpus: 1
-  macos_compatibility: true
-  num_workers: 0  
-  pin_memory: false
-
-# Logging Configuration
-logging:
-  console_level: "INFO"
-  file_level: "DEBUG"
-  log_dir: "logs"
-  checkpoint_dir: "checkpoints"
-  log_every_n_steps: 10
-  save_every_n_epochs: 5
-  export_onnx: true
-  onnx_export_path: "checkpoints/yolov8n_final.onnx"
-
-# Evaluation Configuration
+    translate: 0.15
+  fast_inference_subset: 0.02
+  split_strategy: random
+  test_data_proportion: 1.0
+  test_path: data_organized/test
+  test_split: 0.2
+  train_data_proportion: 0.1
+  train_path: data_organized/train
+  train_split: 0.7
+  val_data_proportion: 0.1
+  val_path: data_organized/val
+  val_split: 0.1
 evaluation:
-  # UPDATE MODEL PATH
-  model_path: "checkpoints/yolov8n_final.pt"  # Path to your trained model
-  data_dir: "data_organized/test"
-  test_images_dir: "data_organized/test/images"
-  test_labels_dir: "data_organized/test/labels"
-  
   batch_size: 8
-  max_eval_images: 10
-  confidence_threshold: 0.25
-  nms_threshold: 0.45
-  
+  bbox_output_dir: evaluation_results/bbox_images
   compute_map: true
   compute_precision_recall: true
-  iou_threshold: 0.5
-  
-  save_results: true
-  output_dir: "evaluation_results"
-  save_plots: true
-  save_bbox_images: true
-  bbox_output_dir: "evaluation_results/bbox_images"
-
-# Inference Configuration
-inference:
-  # UPDATE MODEL PATH
-  model_path: "checkpoints/yolov8n_final.pt"  # Path to your trained model
-  test_image: "data/test_images/test_01.jpg"
-  
-  fast_mode: true
-  subset_size: 0.02
   confidence_threshold: 0.25
+  data_dir: data_organized/test
+  iou_threshold: 0.5
+  max_eval_images: 10
+  model_path: checkpoints/yolov8n_final.pt
   nms_threshold: 0.45
-  
-  save_predictions: true
-  output_dir: "outputs"
+  output_dir: evaluation_results
+  save_bbox_images: true
+  save_plots: true
+  save_results: true
+  test_images_dir: data_organized/test/images
+  test_labels_dir: data_organized/test/labels
+hardware:
+  device: auto
+  gradient_accumulation_steps: 1
+  macos_compatibility: true
+  mixed_precision: true
+  num_gpus: 1
+  num_workers: 0
+  pin_memory: false
+inference:
   batch_size: 1
-  max_detections: 100
   benchmark_runs: 100
+  confidence_threshold: 0.25
+  fast_mode: true
+  max_detections: 100
+  model_path: checkpoints/yolov8n_final.pt
+  nms_threshold: 0.45
+  output_dir: outputs
+  save_predictions: true
+  subset_size: 0.02
+  test_image: data_organized/test/images/525.png
   warmup_runs: 10
+logging:
+  checkpoint_dir: checkpoints
+  console_level: INFO
+  export_onnx: true
+  file_level: DEBUG
+  log_dir: logs
+  log_every_n_steps: 10
+  onnx_export_path: checkpoints/yolov8n_final.onnx
+  save_every_n_epochs: 5
+model:
+  confidence_threshold: 0.25
+  depth_multiplier: 0.33
+  input_size: 640
+  name: yolov8n
+  nms_threshold: 0.45
+  num_classes: 3
+  num_scales: 3
+  width_multiplier: 0.25
+training:
+  batch_size: 1
+  cutmix: 0.1
+  dropout: 0.1
+  focal_loss_alpha: 0.25
+  focal_loss_gamma: 2.0
+  label_smoothing: 0.1
+  learning_rate: 0.0003
+  loss_weights:
+    bbox: 0.1
+    cls: 0.6
+    obj: 0.7
+  lr_decay_factor: 0.1
+  lr_scheduler: cosine
+  min_delta: 0.005
+  mixup: 0.1
+  num_epochs: 2
+  patience: 8
+  warmup_epochs: 8
+  warmup_method: linear
+  warmup_start_lr: 0.0001
+  weight_decay: 0.0003

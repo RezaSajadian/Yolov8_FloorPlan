@@ -1,0 +1,52 @@
+2025-08-13 22:38:37,372 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:38:37,374 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:38:37,375 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:38:37,375 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:39:23,623 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:39:23,624 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:39:23,625 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:39:23,626 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:39:59,744 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:39:59,746 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:39:59,747 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:39:59,748 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:41:31,387 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:41:31,390 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:41:31,393 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:41:31,396 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:42:38,890 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:42:38,892 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:42:38,892 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:42:38,893 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:43:14,929 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:43:14,931 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:43:14,931 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:43:14,932 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:45:48,474 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:45:48,475 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:45:48,475 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:45:48,475 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:46:55,289 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:46:55,291 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:46:55,291 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:46:55,291 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:50:53,178 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:50:53,179 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:50:53,180 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:50:53,180 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:53:44,251 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:53:44,251 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:53:44,252 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:53:44,252 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:58:43,705 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:58:43,706 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:58:43,706 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:58:43,706 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:59:07,591 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:59:07,592 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:59:07,593 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:59:07,593 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25
+2025-08-13 22:59:23,044 | src.models.yolo_model | INFO | info:51 | YOLOv8n model initialized with 3 classes
+2025-08-13 22:59:23,044 | src.models.yolo_model | INFO | info:51 | Input size: 640x640
+2025-08-13 22:59:23,045 | src.models.yolo_model | INFO | info:51 | Depth multiplier: 0.33
+2025-08-13 22:59:23,045 | src.models.yolo_model | INFO | info:51 | Width multiplier: 0.25

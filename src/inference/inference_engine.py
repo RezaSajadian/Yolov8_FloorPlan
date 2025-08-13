@@ -17,7 +17,7 @@ sys.path.append(str(project_root))
 from src.models.yolo_model import YOLOv8n
 from src.utils.logger import get_logger
 from src.utils.config import config_manager
-from src.utils.post_processing_simple import SimpleYOLOPostProcessor
+from src.utils.postprocessing_simple import SimpleYOLOPostProcessor
 
 logger = get_logger(__name__)
 

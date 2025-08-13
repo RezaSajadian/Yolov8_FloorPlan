@@ -16,7 +16,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from src.utils.config import ConfigManager
-from src.utils.post_processing_simple import SimpleYOLOPostProcessor
+from src.utils.postprocessing_simple import SimpleYOLOPostProcessor
 
 # Setup logging
 logger = logging.getLogger(__name__)

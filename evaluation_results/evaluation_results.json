@@ -1,0 +1,26 @@
+{
+  "performance": {
+    "pytorch": {
+      "fps": 0.821458730737501,
+      "latency_ms": 1217.3466086387634,
+      "memory_mb": 0
+    },
+    "onnx": {
+      "fps": 2.8614540047512524,
+      "latency_ms": 349.4726800918579
+    }
+  },
+  "evaluation": {
+    "mAP": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1_score": 0.0
+  },
+  "model_info": {
+    "model_path": "checkpoints/yolov8n_final.pt",
+    "input_size": 640,
+    "num_classes": 3,
+    "device": "cpu"
+  },
+  "onnx_path": "models/yolov8n.onnx"
+}
