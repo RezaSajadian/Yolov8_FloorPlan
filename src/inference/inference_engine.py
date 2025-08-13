@@ -87,11 +87,10 @@ class YOLOv8nInferenceEngine:
         image_tensor = torch.from_numpy(image_normalized).permute(2, 0, 1).unsqueeze(0)
         
         return image_tensor.to(self.device)
-    
-    def postprocess_predictions(self, predictions: List[torch.Tensor], 
-                               original_shape: Tuple[int, int]) -> List[Dict]:
-        # Returns empty detections - to be reimplemented later
-        return []
+        
+        # Use the post-processor to handle predictions
+        detections = self.post_processor.process_predictions(predictions, original_shape)
+        return detections
     
     def run_inference(self, image: np.ndarray) -> Tuple[List[Dict], float]:
 
