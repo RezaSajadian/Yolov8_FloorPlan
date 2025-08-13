@@ -188,21 +188,23 @@ def setup_trainer(config: dict):
         ),
         
         # Learning rate monitoring
-        LearningRateMonitor(logging_interval='step')
+        pl.callbacks.LearningRateMonitor(logging_interval='step')
     ]
     
-    # Logger - make TensorBoard optional
-    try:
-        logger_inst = TensorBoardLogger(
-            save_dir='logs',
-            name='yolov8n_training',
-            version=None
-        )
-        logger.info("TensorBoard logger initialized")
-    except Exception as e:
-        logger.warning(f"TensorBoard not available, using basic logging: {e}")
-        logger_inst = None
+    # Logger - comprehensive TensorBoard logging
+    logger_inst = TensorBoardLogger(
+        save_dir='logs',
+        name='yolov8n_training',
+        version=None,
+        log_graph=True,  # Log model graph
+        default_hp_metric=False  # Don't log hyperparameters as metric
+    )
+    logger.info("TensorBoard logger initialized with comprehensive logging")
     
+    # Create logs directory if it doesn't exist
+    os.makedirs('logs', exist_ok=True)
+    
+        
     # Trainer configuration
     trainer_kwargs = {
         'max_epochs': config['training']['num_epochs'],

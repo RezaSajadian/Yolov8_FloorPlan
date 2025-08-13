@@ -35,6 +35,8 @@ class YOLOv8nLightningModule(pl.LightningModule):
         # Loss tracking
         self.train_losses = []
         self.val_losses = []
+
+        self.example_input_array = torch.randn(1, 3, input_size, input_size)
         
         logger.info(f"Lightning module initialized with {num_classes} classes")
         logger.info(f"Input size: {input_size}x{input_size}")
@@ -55,11 +57,14 @@ class YOLOv8nLightningModule(pl.LightningModule):
         loss_dict = self.loss_fn(predictions, labels)
         total_loss = loss_dict['total']
         
-        # Log individual loss components
-        self.log('train_loss', total_loss, prog_bar=True, sync_dist=True)
-        self.log('train_bbox_loss', loss_dict['bbox'], sync_dist=True)
-        self.log('train_obj_loss', loss_dict['obj'], sync_dist=True)
-        self.log('train_cls_loss', loss_dict['cls'], sync_dist=True)
+        # Comprehensive logging for TensorBoard
+        self.log('train/total_loss', total_loss, prog_bar=True, sync_dist=True, on_step=True, on_epoch=True)
+        self.log('train/bbox_loss', loss_dict['bbox'], sync_dist=True, on_step=True, on_epoch=True)
+        self.log('train/obj_loss', loss_dict['obj'], sync_dist=True, on_step=True, on_epoch=True)
+        self.log('train/cls_loss', loss_dict['cls'], sync_dist=True, on_step=True, on_epoch=True)
+        
+        # Learning rate logging
+        self.log('train/learning_rate', self.optimizers().param_groups[0]['lr'], sync_dist=True, on_step=True)
         
         # Store for epoch end logging
         self.train_losses.append(total_loss.item())
@@ -80,11 +85,11 @@ class YOLOv8nLightningModule(pl.LightningModule):
             loss_dict = self.loss_fn(predictions, labels)
             total_loss = loss_dict['total']
         
-        # Log validation metrics
-        self.log('val_loss', total_loss, prog_bar=True, sync_dist=True)
-        self.log('val_bbox_loss', loss_dict['bbox'], sync_dist=True)
-        self.log('val_obj_loss', loss_dict['obj'], sync_dist=True)
-        self.log('val_cls_loss', loss_dict['cls'], sync_dist=True)
+        # Comprehensive validation logging for TensorBoard
+        self.log('val/total_loss', total_loss, prog_bar=True, sync_dist=True, on_step=True, on_epoch=True)
+        self.log('val/bbox_loss', loss_dict['bbox'], sync_dist=True, on_step=True, on_epoch=True)
+        self.log('val/obj_loss', loss_dict['obj'], sync_dist=True, on_step=True, on_epoch=True)
+        self.log('val/cls_loss', loss_dict['cls'], sync_dist=True, on_step=True, on_epoch=True)
         
         # Store for epoch end logging
         self.val_losses.append(total_loss.item())
@@ -100,7 +105,14 @@ class YOLOv8nLightningModule(pl.LightningModule):
         """Log training metrics at epoch end."""
         if self.train_losses:
             avg_loss = sum(self.train_losses) / len(self.train_losses)
-            self.log('train_epoch_loss', avg_loss, sync_dist=True)
+            min_loss = min(self.train_losses)
+            max_loss = max(self.train_losses)
+            
+            # Log comprehensive epoch metrics
+            self.log('train/epoch_avg_loss', avg_loss, sync_dist=True)
+            self.log('train/epoch_min_loss', min_loss, sync_dist=True)
+            self.log('train/epoch_max_loss', max_loss, sync_dist=True)
+            self.log('train/epoch_loss_std', np.std(self.train_losses), sync_dist=True)
             logger.info(f"Epoch {self.current_epoch} - Average training loss: {avg_loss:.4f}")
             self.train_losses.clear()
     
@@ -108,7 +120,14 @@ class YOLOv8nLightningModule(pl.LightningModule):
         """Log validation metrics at epoch end."""
         if self.val_losses:
             avg_loss = sum(self.val_losses) / len(self.val_losses)
-            self.log('val_epoch_loss', avg_loss, sync_dist=True)
+            min_loss = min(self.val_losses)
+            max_loss = max(self.val_losses)
+            
+            # Log comprehensive epoch metrics
+            self.log('val/epoch_avg_loss', avg_loss, sync_dist=True)
+            self.log('val/epoch_min_loss', min_loss, sync_dist=True)
+            self.log('val/epoch_max_loss', max_loss, sync_dist=True)
+            self.log('val/epoch_loss_std', np.std(self.val_losses), sync_dist=True)
             logger.info(f"Epoch {self.current_epoch} - Average validation loss: {avg_loss:.4f}")
             self.val_losses.clear()
     
@@ -179,14 +198,41 @@ class YOLOv8nLightningModule(pl.LightningModule):
     def get_model_info(self) -> Dict[str, Any]:
         total_params = sum(p.numel() for p in self.parameters())
         trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+        # Calculate model size
+        param_size = 0
+        buffer_size = 0
+        for param in self.parameters():
+            param_size += param.nelement() * param.element_size()
+        for buffer in self.buffers():
+            buffer_size += buffer.nelement() * buffer.element_size()
         
+        model_size_mb = (param_size + buffer_size) / 1024 / 1024
+
         return {
             'total_parameters': total_params,
             'trainable_parameters': trainable_params,
-            'model_size_mb': self.model.get_model_size_mb(),
-            'input_size': self.input_size,
-            'num_classes': self.num_classes
+            'model_size_mb': model_size_mb,
+            'num_classes': self.num_classes,
+            'input_size': self.input_size
         }
+
+    def on_train_start(self) -> None:
+        """Log model information at training start."""
+        model_info = self.get_model_info()
+        
+        # Log model architecture info
+        self.logger.experiment.add_text(
+            'model_info',
+            f"Total Parameters: {model_info['total_parameters']:,}\n"
+            f"Trainable Parameters: {model_info['trainable_parameters']:,}\n"
+            f"Model Size: {model_info['model_size_mb']:.2f} MB\n"
+            f"Input Size: {model_info['input_size']}x{model_info['input_size']}\n"
+            f"Number of Classes: {model_info['num_classes']}"
+        )
+        
+        logger.info(f"Training started with model: {model_info['total_parameters']:,} parameters")
+
 
 
 def create_lightning_module(num_classes: int = 3, input_size: int = 640, 
