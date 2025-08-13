@@ -17,3 +17,27 @@ class ConvBNSiLU(nn.Module):
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.act(self.bn(self.conv(x)))
+
+class CSPBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, num_blocks: int = 1):
+        super().__init__()
+        mid_channels = out_channels // 2
+        
+        self.main_branch = nn.Sequential(
+            ConvBNSiLU(in_channels, mid_channels, 1),
+            *[ConvBNSiLU(mid_channels, mid_channels, 3, padding=1) for _ in range(num_blocks)]
+        )
+        
+        self.shortcut = ConvBNSiLU(in_channels, mid_channels, 1)
+        
+        self.final_conv = ConvBNSiLU(mid_channels * 2, out_channels, 1)
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Split input into two branches
+        main_out = self.main_branch(x)
+        shortcut_out = self.shortcut(x)
+        
+        # Concatenate along channel dimension
+        # adds a new dimension to combine features from both branches
+        combined = torch.cat([main_out, shortcut_out], dim=1)
+        return self.final_conv(combined)
