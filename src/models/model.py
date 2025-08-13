@@ -41,3 +41,21 @@ class CSPBlock(nn.Module):
         # adds a new dimension to combine features from both branches
         combined = torch.cat([main_out, shortcut_out], dim=1)
         return self.final_conv(combined)
+
+
+class SPPF(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, k: int = 5):
+        super().__init__()
+        mid_channels = in_channels // 2
+        
+        self.conv1 = ConvBNSiLU(in_channels, mid_channels, 1)
+        self.conv2 = ConvBNSiLU(mid_channels * 4, out_channels, 1)
+        self.maxpool = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.conv1(x)
+        pool1 = self.maxpool(x)
+        pool2 = self.maxpool(pool1)
+        pool3 = self.maxpool(pool2)
+        
+        return self.conv2(torch.cat([x, pool1, pool2, pool3], dim=1))
